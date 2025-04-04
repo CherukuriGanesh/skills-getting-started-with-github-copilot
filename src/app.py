@@ -38,6 +38,42 @@ activities = {
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "Basketball": {
+        "description": "Team sport focusing on coordination and strategy",
+        "schedule": "Tuesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 15,
+        "participants": []
+    },
+    "Tennis": {
+        "description": "Individual or doubles sport focusing on agility and precision",
+        "schedule": "Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 10,
+        "participants": []
+    },
+    "Painting": {
+        "description": "Artistic activity focusing on creativity and expression",
+        "schedule": "Wednesdays, 3:00 PM - 4:30 PM",
+        "max_participants": 20,
+        "participants": []
+    },
+    "Sculpting": {
+        "description": "Artistic activity focusing on three-dimensional art",
+        "schedule": "Fridays, 3:00 PM - 4:30 PM",
+        "max_participants": 10,
+        "participants": []
+    },
+    "Chess": {
+        "description": "Intellectual activity focusing on strategy and competition",
+        "schedule": "Mondays, 3:30 PM - 5:00 PM",
+        "max_participants": 12,
+        "participants": []
+    },
+    "Debate": {
+        "description": "Intellectual activity focusing on argumentation and public speaking",
+        "schedule": "Wednesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 20,
+        "participants": []
     }
 }
 
@@ -61,6 +97,28 @@ def signup_for_activity(activity_name: str, email: str):
 
     # Get the specificy activity
     activity = activities[activity_name]
+    # Validate student is not already signed up
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student already signed up")
+    # Validate max participants not exceeded
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Max participants exceeded")
+    # Validate email format
+    if "@" not in email or "." not in email.split("@")[1]:
+        raise HTTPException(status_code=400, detail="Invalid email format")
+    # Validate email domain
+    if not email.endswith("@mergington.edu"):
+        raise HTTPException(status_code=400, detail="Invalid email domain")
+    # Validate email not empty
+    if not email:
+        raise HTTPException(status_code=400, detail="Email cannot be empty")
+    # Validate email not too long
+    if len(email) > 50:
+        raise HTTPException(status_code=400, detail="Email too long")
+    # Validate email not too short
+    if len(email) < 5:
+        raise HTTPException(status_code=400, detail="Email too short")
+    # Validate email not already signed up  
 
     # Add student
     activity["participants"].append(email)
